@@ -1,0 +1,90 @@
+type User {
+  id: ID!
+  additionalSlot: Int
+  company: ID
+  countryCode: String
+  freetrialPeriod: String
+  purchasePeriod: String
+  purchaseType: String
+  tmpData: String
+  updateReason: String
+  nickname: String
+  officialFlag: Int
+  recommendType: Int
+}
+
+input UserFilter {
+  companyId: Int
+}
+
+input userRegisterInput {
+  additionalSlot: Int!,
+  company: ID!,
+  countryCode: String,
+  freetrialPeriod: String,
+  purchasePeriod: String,
+  purchaseType: String,
+  tmpData: String,
+  updateReason: String,
+  nickname: String,
+  officialFlag: Int!,
+  recommendType: Int
+}
+
+input editUserInput {
+  id: Int!,
+  additionalSlot: Int!,
+  company: ID!,
+  countryCode: String,
+  freetrialPeriod: String,
+  purchasePeriod: String,
+  purchaseType: String,
+  tmpData: String,
+  updateReason: String,
+  nickname: String,
+  officialFlag: Int!,
+  recommendType: Int
+}
+
+type getUsersConnection {
+  totalRecords: Int!
+  users: [User]
+  currentPage: Int!
+  totalPages: Int!
+}
+
+type userConnection {
+  user: User
+}
+
+type userRequestFormConnection {
+  content: String
+}
+
+extend type Query {
+  # get all users
+  getUsers(limit: Int, offset: Int, filter: UserFilter): getUsersConnection!
+
+  # user request form
+  userRequestForm(trackContent: String, albumContent: String, playlistContent: String): userRequestFormConnection!
+}
+
+extend type Mutation {
+  # register user
+  userRegister(input: userRegisterInput!): userConnection!
+
+  # edit user
+  editUser(input: editUserInput!): userConnection!
+
+  # login by email
+  loginByEmail(email: String!): userConnection!
+
+  # reset password on the web view
+  resetPassword: userConnection!
+
+  # user send email reset password
+  sendMailResetPassword(email: String!): userConnection!
+
+  # user logout
+  logout(email: String!): userConnection!
+}

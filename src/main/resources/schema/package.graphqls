@@ -1,0 +1,68 @@
+type Package {
+  id: ID!
+  type: String
+  package_id: String
+  package_title: String
+  package_title_en: String
+  package_title_ruby: String
+  release_date: String
+  thumb: String
+  copyright: String
+  artist_id: String
+  artist_name: String
+  visible_artist: Boolean
+}
+
+input PackageFilter {
+  isPickup: Boolean
+  isNewRelease: Boolean
+  freeWordSearch: String
+  isMostSearched: Boolean
+  isFavorite: Boolean
+}
+
+input paramSortType {
+  isSortByReleaseDate: Boolean
+  isSortByCountPlay: Boolean
+  isSortByPlayRecently: Boolean
+  isSortByAddRecently: Boolean
+  isSortByHiragana: Boolean
+}
+
+type getPackagesConnection {
+  totalRecords: Int!
+  packages: [Package]
+  currentPage: Int!
+  totalPages: Int!
+}
+
+type getPackagesOfUserConnection {
+  userId: Int!
+  packages: getPackagesConnection
+}
+
+type getPackagesOfLibraryConnection {
+  libraryId: Int!
+  packages: getPackagesConnection
+}
+
+type suggestParamsSearchPackage {
+  content: String!
+}
+
+extend type Query {
+  # get packages
+  getPackages(limit: Int, offset: Int, filter: PackageFilter): getPackagesConnection!
+
+  # suggest search for package
+  suggestSearchPackages: [suggestParamsSearchPackage]
+
+  # get packages of user
+  getPackagesOfUser(limit: Int, offset: Int, userId: Int!): getPackagesOfUserConnection!
+
+  # get packages of library
+  getPackagesOfLibrary(limit: Int, offset: Int, libraryId: Int!): getPackagesOfLibraryConnection!
+
+  # sort packages
+  sortPackages(limit: Int, offset: Int, sortType: paramSortType!): getPackagesConnection!
+}
