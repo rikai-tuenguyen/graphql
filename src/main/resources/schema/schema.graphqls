@@ -1,0 +1,22 @@
+type Author {
+	id: ID!
+	name: String!
+	age: Int
+	tracks: [Track]
+}
+
+type Track {
+  id: ID!
+  title: String!
+  image: String!
+  author: Author
+}
+
+type Query {
+	findAllAuthors: [Author]
+	top100Author: [Author]
+}
+
+type Mutation {
+    createAuthor(name: String, age: Int): Author
+}
