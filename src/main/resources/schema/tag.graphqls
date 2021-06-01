@@ -1,0 +1,38 @@
+type Tag {
+  id: ID!
+  content: String
+  isPickup: Boolean
+}
+
+input TagFilter {
+  isPickup: Boolean
+  indexSearch: Int
+  hashtagSuggest: String
+  isMostUsed: Boolean
+}
+
+type getHashTagsConnection {
+  totalRecords: Int!
+  tags: [Tag]
+  currentPage: Int!
+  totalPages: Int!
+}
+
+type suggestHashTagsConnection {
+  tags: [Tag]
+}
+
+type suggestParamsSearchHashTags {
+  content: String!
+}
+
+extend type Query {
+  # get hashtags
+  getHashTags(limit: Int, offset: Int, filter: TagFilter): getHashTagsConnection!
+
+  # suggest hashtags list
+  suggestHashTags: suggestHashTagsConnection!
+
+  # suggest search for hashtags
+  suggestSearchHashTags: [suggestParamsSearchHashTags]
+}
