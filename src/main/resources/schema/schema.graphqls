@@ -1,22 +1,106 @@
-type Author {
-	id: ID!
-	name: String!
-	age: Int
-	tracks: [Track]
+scalar Datetime
+
+#campaign
+type Campaign {
+    id: ID!,
+    link_url: String!,
+    start_at: Datetime,
+    end_at: Datetime,
+    display_order: Int,
+    title: String,
+    content: String,
+    is_display: Int
 }
 
+
+type CampaignConnection {
+    totalRecord: Int,
+    data: [Campaign]
+}
+
+type CampaignQuery {
+    campaignThisWeek(limit: Int, offset: Int): CampaignConnection!
+}
+
+#track
 type Track {
-  id: ID!
-  title: String!
-  image: String!
-  author: Author
+    type: String,
+    track_id: String,
+    track_title: String,
+    track_title_en: String,
+    track_title_ruby: String,
+    duration: Int,
+    audition_duration: Int,
+    enable_audition: Boolean,
+    tieup: String,
+    tieup_en: String,
+    disc_no: Int,
+    track_no: Int,
+    artist_id: String,
+    artist_name: String,
+    artist_name_en: String,
+    artist_thumb: String,
+    visible_artist: Boolean,
+    package_id: String,
+    package_title: String,
+    package_title_en: String,
+    package_title_ruby: String,
+    release_date: String,
+    thumb: String,
+    copyright: String,
+    ranking_position: String
 }
 
-type Query {
-	findAllAuthors:[Author]
-	top100Author: [Author]
+input TrackFilter {
+    listType: String!  #type: daily, weekly, monthly
+    keyword: String!
+    user_id: Int!
+    playlist_id: Int!
+    artist_id:Int!
+}
+
+type TrackConnection {
+    totalRecord: Int,
+    data: [Track]
+}
+
+type TrackQuery {
+    trackListenTop(limit: Int, offset: Int,filter: TrackFilter): TrackConnection!
+    trackListPickup(limit: Int, offset: Int): TrackConnection!
+    trackListNew(limit: Int, offset: Int): TrackConnection!
+    trackSearch(limit: Int, offset: Int, filter: TrackFilter): TrackConnection!
+    trackListSearchTop(limit: Int, offset: Int): TrackConnection!
+    trackListUserInLibrary(limit: Int, offser: Int, filter: TrackFilter): TrackConnection!
+    trackSort(limit: Int, offser: Int, filter: TrackFilter): TrackConnection!
+    trackDelete( track_id: Int!) : String!
+    trackListInPlaylist(limit: Int, offser: Int, filter: TrackFilter): TrackConnection!
 }
 
 type Mutation {
-    createAuthor(name: String, age: Int): Author
+    addTrack(
+        type: String,
+        track_id: String,
+        track_title: String,
+        track_title_en: String,
+        track_title_ruby: String,
+        duration: Int,
+        audition_duration: Int,
+        enable_audition: Boolean,
+        tieup: String,
+        tieup_en: String,
+        disc_no: Int,
+        track_no: Int,
+        artist_id: String,
+        artist_name: String,
+        artist_name_en: String,
+        artist_thumb: String,
+        visible_artist: Boolean,
+        package_id: String,
+        package_title: String,
+        package_title_en: String,
+        package_title_ruby: String,
+        release_date: String,
+        thumb: String,
+        copyright: String,
+        ranking_position: String): Track
 }
