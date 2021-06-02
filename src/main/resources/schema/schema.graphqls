@@ -12,11 +12,112 @@ type Track {
   author: Author
 }
 
+type User {
+  id: ID!
+  additionalSlot: Int
+  company: ID
+  countryCode: String
+  freetrialPeriod: String
+  purchasePeriod: String
+  purchaseType: String
+  tmpData: String
+  updateReason: String
+  nickname: String
+  officialFlag: Int
+  recommendType: Int
+}
+
+type Playlist {
+	user: User!
+	playlistId: Int!
+	playlistDescription: String
+	playlistTitle: String
+	shareFlag: Int
+	countryCode: String
+	nickname: String
+	spid: String
+	createdDate: DateTime
+	updatedDate: DateTime
+	thump: String
+	isPublic: Int	
+}
+
+type Artist{
+	artistId: String!
+	artistName: String!
+	artistNameEn: String
+	artistThumb: String!
+}
+
+input PlaylistFilter {
+	userId: String
+	listType: String # type: daily, weekly, monthly
+	keySearch: String
+
+}
+
+input ArtistFilter {
+	keySearch: String
+}
+
+type PlaylistCollection {
+	totalRecord: Int
+	data: [Playlist]
+}
+
+type ArtistCollection {
+	totalRecord: Int
+	data: [Artist]
+}
+
+
 type Query {
 	findAllAuthors:[Author]
 	top100Author: [Author]
+	
 }
 
 type Mutation {
     createAuthor(name: String, age: Int): Author
+}
+
+extend type Query {
+	#get all playlists
+	playlist(limit: Int, offset: Int): PlaylistCollection
+	
+	#get all playlists according to user preferences 
+	playlistInterests(limit: Int, offset: Int, filter: PlayistFilter): PlaylistCollection
+	
+	#get all playlists by top listen
+	playlistTopListen(limit: Int, offset: Int, filter: PlayistFilter): PlaylistCollection
+	
+	#get all playlists by key search
+	playlistSearch(limit: Int, offset: Int, filter: PlayistFilter): PlaylistCollection
+	
+	#get all playlists by user
+	playlistUser(limit: Int, offset: Int, filter: PlayistFilter): PlaylistCollection
+	
+	#get all playlists by sort
+	playlistSort(limit: Int, offset: Int, filter: PlayistFilter): PlaylistCollection
+	
+	#get all artists
+	artists(limit: Int, offset: Int, filter: ArtistFilter): ArtistCollection
+	
+	#get all artists by key search
+	artistSearch(limit: Int, offset: Int, filter: ArtistFilter): ArtistCollection
+	
+	#get artist
+	artist(artistId: String): Artist
+	
+	#get all artists by sort
+	artistSort(limit: Int, offset: Int, filter: ArtistFilter): ArtistCollection
+}
+
+extend type Mutation {
+
+    #delete playlist
+	deletePlaylist(playlistId: String): String
+	
+	#add playlist
+    addPlaylist(playlist: Playlist): Playlist
 }
